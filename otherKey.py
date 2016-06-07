@@ -10,7 +10,6 @@ class UCASEvaluate:
     __courserSelectionPage = 'http://sep.ucas.ac.cn/portal/site/226/821'
     __studentCourseIdentify = 'http://jwxk.ucas.ac.cn/login?Identity='
     __studentCourseEvaluateUrl = 'http://jwxk.ucas.ac.cn'
-    __evaluateCouse = 'http://jwxk.ucas.ac.cn/evaluate/45462'
     __headers = {
                 'Host': 'sep.ucas.ac.cn',
                 'Connection': 'keep-alive',
@@ -49,8 +48,8 @@ class UCASEvaluate:
         indentity = str(soup.noscript).split('Identity=')[1].split('"'[0])[0]
         coursePage = UCASEvaluate.__studentCourseIdentify + indentity
         self.s.get(coursePage)
-        #目前使用的url是春季学期的，可能与秋季学期会不一样
-        response = self.s.get(UCASEvaluate.__evaluateCouse)
+        evaluateCourse = UCASEvaluate.__studentCourseEvaluateUrl + soup.find(text='评估课程').parent.parent.parent.find_all('a')[-1]['href']
+        response = self.s.get(evaluateCourse)
         soup = BeautifulSoup(response.text,'html.parser')
         courseListResource = soup.body.table.tbody.find_all('tr')
         courseDict = {}
