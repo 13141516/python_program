@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# @author 852802020@qq.com
 import requests
 from bs4 import BeautifulSoup
 import sys
@@ -47,7 +49,7 @@ class UCASEvaluate:
         indentity = str(soup.noscript).split('Identity=')[1].split('"'[0])[0]
         coursePage = UCASEvaluate.__studentCourseIdentify + indentity
         self.s.get(coursePage)
-        #When i accomplish this program, this url is for spring semester
+        #目前使用的url是春季学期的，可能与秋季学期会不一样
         response = self.s.get(UCASEvaluate.__evaluateCouse)
         soup = BeautifulSoup(response.text,'html.parser')
         courseListResource = soup.body.table.tbody.find_all('tr')
