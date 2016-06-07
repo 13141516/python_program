@@ -47,7 +47,8 @@ class UCASEvaluate:
         soup = BeautifulSoup(response.text,'html.parser')
         indentity = str(soup.noscript).split('Identity=')[1].split('"'[0])[0]
         coursePage = UCASEvaluate.__studentCourseIdentify + indentity
-        self.s.get(coursePage)
+        response = self.s.get(coursePage)
+        soup = BeautifulSoup(response.text,'html.parser')
         evaluateCourse = UCASEvaluate.__studentCourseEvaluateUrl + soup.find(text='评估课程').parent.parent.parent.find_all('a')[-1]['href']
         response = self.s.get(evaluateCourse)
         soup = BeautifulSoup(response.text,'html.parser')
