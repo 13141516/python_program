@@ -54,8 +54,6 @@ class UCASEvaluate:
         soup = BeautifulSoup(response.text,'html.parser')
         courseListResource = soup.body.table.tbody.find_all('tr')
         courseDict = {}
-        if len(courseListResource) == 0:
-            self.courseDict =  courseDict
         for course in courseListResource:
             tdList = course.find_all('td')
             if tdList[-1].a is None:
