@@ -23,5 +23,5 @@ windows平台<br />
 4.python jdcrawler.py<br />
 
 #result
-4.下载商品的图片信息，图片的命名为:商品ID.jpg
+4.下载商品的图片信息，图片的命名为:商品ID.jpg;<br />
   获取商品的信息存于文件desc.txt中，格式为：商品ID|商品类型|商品描述|商品价格
