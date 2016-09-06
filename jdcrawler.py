@@ -1,6 +1,5 @@
 '''
 Created on Sep 3, 2016
-
 @author: chenli
 '''
 import urllib.request
@@ -9,9 +8,9 @@ from bs4 import BeautifulSoup
 import os
 
 class JDCrawler(object):
-    __index = 2300000#商品起始ID
+    __index = 3210000#商品起始ID
     __url = 'http://item.jd.com/'
-    __urlPre = 'http://p.3.cn/prices/get?type=1&area=1_72_4139&pdtk=&pduid=1672389251&pdpin=&pdbp=0&skuid=J_'
+    __urlPre = 'http://p.3.cn/prices/get?type=1&area=1_72_4139&pdtk=TRfWyXeE5HfdQvwUU%2FF4%2BwdPFj4aPfizb59C5WOxAtRwftqyRqIA1GDKtCk%2FSkti&pduid=1672389251&pdpin=&pdbp=0&skuid=J_'
     __urlNex = '&callback=cnp'
     __path = 'F:\pythonworkspace\download'
     __headers = {
@@ -24,13 +23,12 @@ class JDCrawler(object):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.80 Safari/537.36',
         'Accept-Encoding': 'gzip, deflate, sdch',
         'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
-
     }
     
     def __init__(self, sumValue):
         self.s = requests.Session()
         self.__sum = sumValue
-        self.filedes = open(JDCrawler.__path + '\\desc.txt', 'w')
+        self.filedes = open(JDCrawler.__path + '\\des.txt', 'w')
         
     def startDownload(self):
         flag = 0
@@ -43,7 +41,17 @@ class JDCrawler(object):
                 urlother = soup.find(text='商品介绍').parent['href']
                 response = self.s.get(url + urlother, headers = JDCrawler.__headers)
                 soup = BeautifulSoup(response.text,'html.parser')
-                itemtype = soup.body.find_all(attrs={'class':'p-parameter-list'})[-1].find_all('li')[-1]['title']
+                itemtypelist = soup.body.find_all(attrs={'class':'p-parameter-list'})[-1].find_all('li')
+                pFlag = True
+                for itemtypelistitem in itemtypelist:
+                    itemtypestr = str(itemtypelistitem.string.encode('utf-8'),'utf-8','ignore')
+                    if itemtypestr.startswith('分类') or itemtypestr.startswith('场合') or itemtypestr.startswith('类别') or itemtypestr.startswith('类型'):
+                        itemtype = itemtypelistitem['title']
+                        pFlag = False
+                        break
+                if pFlag:
+                    JDCrawler.__index = JDCrawler.__index + 1
+                    continue
                 response = self.s.get(JDCrawler.__urlPre + str(JDCrawler.__index) + JDCrawler.__urlNex)
                 price = eval(response.text.split('[')[1].split(']')[0])['p']
                 if item['alt'] != None and item['src'] != None and itemtype != None and price != None:
@@ -52,9 +60,9 @@ class JDCrawler(object):
                     flag +=1                    
             except Exception:
                 pass
-            JDCrawler.__index = JDCrawler.__index + 1;
+            JDCrawler.__index = JDCrawler.__index + 1
         self.filedes.close()
 
 if __name__ == '__main__':
-    test = JDCrawler(10000)#初始化需要下载的条目数
+    test = JDCrawler(20000)#初始化需要下载的条目数
     test.startDownload()
