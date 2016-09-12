@@ -6,11 +6,12 @@ import urllib.request
 import requests
 from bs4 import BeautifulSoup
 import os
+import re
 
 class JDCrawler(object):
-    __index = 3210000#商品起始ID
+    __index = 2600000#商品起始ID
     __url = 'http://item.jd.com/'
-    __urlPre = 'http://p.3.cn/prices/get?type=1&area=1_72_4139&pdtk=TRfWyXeE5HfdQvwUU%2FF4%2BwdPFj4aPfizb59C5WOxAtRwftqyRqIA1GDKtCk%2FSkti&pduid=1672389251&pdpin=&pdbp=0&skuid=J_'
+    __urlPre = 'http://p.3.cn/prices/get?type=1&area=1_72_0&pdtk=&pduid=&pdpin=&pdbp=0&skuid=J_'
     __urlNex = '&callback=cnp'
     __path = 'F:\pythonworkspace\download'
     __headers = {
@@ -29,6 +30,7 @@ class JDCrawler(object):
         self.s = requests.Session()
         self.__sum = sumValue
         self.filedes = open(JDCrawler.__path + '\\des.txt', 'w')
+        self.regexItem = re.compile(r'^分类|^类别|^类型|^场合|^功能')
         
     def startDownload(self):
         flag = 0
@@ -45,7 +47,7 @@ class JDCrawler(object):
                 pFlag = True
                 for itemtypelistitem in itemtypelist:
                     itemtypestr = str(itemtypelistitem.string.encode('utf-8'),'utf-8','ignore')
-                    if itemtypestr.startswith('分类') or itemtypestr.startswith('场合') or itemtypestr.startswith('类别') or itemtypestr.startswith('类型'):
+                    if re.match(self.regexItem, itemtypestr):
                         itemtype = itemtypelistitem['title']
                         pFlag = False
                         break
@@ -64,5 +66,5 @@ class JDCrawler(object):
         self.filedes.close()
 
 if __name__ == '__main__':
-    test = JDCrawler(20000)#初始化需要下载的条目数
+    test = JDCrawler(10000)#初始化需要下载的条目数
     test.startDownload()
