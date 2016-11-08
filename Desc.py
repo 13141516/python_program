@@ -5,11 +5,11 @@ Created on Sep 5, 2016
 '''
 
 #属性查找策略
-#1.类中的属性X若是一个data descriptor的实例，则查找该属性时，会跳过__getattribute__，__getattr__，直接在__get__中查找。否则进入下一步。
+#1.类中的属性X若是一个data descriptor的实例，则查找该属性时，会跳过__getattribute__，__getattr__，直接在data descriptor的__get__中查找。否则进入下一步。
 #2.一般查找类的属性，调用的次序是类的__getattribute__，若找不到则调用是__getattr__，然后是父类的__getattribute__，__getattr__，依次循环。
 
 #属性赋值策略
-#1.查找obj.__class__.__dict__，如果attr存在并且是一个data descriptor，调用attr的__set__方法，结束。如果不存在，会继续到obj.__class__的父类和祖先类中查找，找到 data descriptor则调用其__set__方法。否则则进入下一步。
+#1.查找obj.__class__.__dict__，如果attr存在并且是一个data descriptor，调用attr的data descriptor的__set__方法，结束。如果不存在，会继续到obj.__class__的父类和祖先类中查找，找到 data descriptor则调用其__set__方法。否则则进入下一步。
 #2.直接在obj.__dict__中加入obj.__dict__['attr'] = value
 
 from weakref import WeakKeyDictionary
