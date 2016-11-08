@@ -4,6 +4,7 @@
 3.metaclass的使用，改变将类Xoo中的字段名称(属性字段，方法字段)改为大写<br />
 4.京东商品信息的爬取<br />
 5.python描述符的使用，及属性查找的策略<br />
+6.Iterator && Iterable 对比<br />
 
 # config
 python 3.4.4<br /> 
@@ -17,6 +18,7 @@ windows平台<br />
   pip install beautifulsoup4<br /> 
   pip install requests<br /> 
 5.无<br />
+6.无<br />
 
 #run
 1.python otherKey.py 登录sep邮箱 登录sep密码<br /> 
@@ -24,6 +26,7 @@ windows平台<br />
 3.python metapro.py<br />
 4.python jdcrawler.py<br />
 5.python desc.py<br />
+6.python iter.py
 
 #result
 4.下载商品的图片信息，图片的命名为:商品ID.jpg;<br />
